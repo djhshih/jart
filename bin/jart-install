@@ -19,8 +19,10 @@ target_file=$JAR_PATH/${jar_base}
 cp $jar_file $target_file
 
 # Create symbolic links if jar file contains versioning
-if echo $jar_base | grep -q -E '[-_][0-9]+\.[0-9]+\.jar'; then
-	jar_alias=$(echo $jar_base | sed -E 's/[-_][0-9]+\.[0-9]+\.jar/.jar/')
+if echo $jar_base | grep -q -E '[-_][0-9]+(\.[0-9]+)+\.jar'; then
+	# strip versioning from jar file name
+	jar_alias=$(echo $jar_base | sed -E 's/[-_][0-9]+(\.[0-9]+)+\.jar/.jar/')
+	# create link
 	cd $JAR_PATH
 	ln -sf $jar_base $jar_alias
 	cd -
