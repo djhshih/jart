@@ -25,6 +25,6 @@ if echo $jar_base | grep -q -E '[-_][0-9]+(\.[0-9]+)+\.jar'; then
 	# create link
 	cd $JAR_PATH
 	ln -sf $jar_base $jar_alias
-	cd -
+	cd - > /dev/null
 fi
 
