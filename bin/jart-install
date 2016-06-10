@@ -1,0 +1,30 @@
+#!/bin/bash
+
+# Install jar file into common location
+
+set -o errexit
+set -o nounset
+
+if [[ -z $JAR_PATH ]]; then
+	JAR_PATH=$HOME/java
+fi
+
+if (( $# < 1 )); then
+	echo "usage: ${0##*/} <jar_file>"
+	exit 1
+fi
+
+jar_file=$1; shift
+jar_base=${jar_file##*/}
+target_file=$JAR_PATH/${jar_base}
+
+cp $jar_file $target_file
+
+# Create symbolic links if jar file contains versioning
+if echo $jar_base | grep -q -E '[-_][0-9]+\.[0-9]+\.jar'; then
+	jar_alias=$(echo $jar_base | sed -E 's/[-_][0-9]+\.[0-9]+\.jar/.jar/')
+	cd $JAR_PATH
+	ln -sf $jar_base $jar_alias
+	cd -
+fi
+

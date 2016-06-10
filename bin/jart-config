@@ -1,0 +1,49 @@
+#!/bin/bash
+
+# Set default options for running jar file
+
+set -o errexit
+set -o nounset
+
+if [[ -z $JAR_PATH ]]; then
+	JAR_PATH=$HOME/java
+fi
+
+
+if (( $# < 1 )); then
+	echo "usage: ${0##*/} [java_options] <jar_file>"
+	echo
+	echo "Available jar files to configure: "
+	echo
+	ls -1 $JAR_PATH | grep '\.jar$'
+	exit 1
+fi
+
+
+# split command line args into java_options, jar_file, and args_to_jar
+
+opts=''; last=''
+while (( $# > 0 )); do
+	if [[ $1 == "--" ]]; then
+		shift
+		break
+	fi
+	if [[ -n $last ]]; then
+		opts+="$last "
+	fi
+	last=$1; shift
+done
+
+# append extension if it does not already exist
+
+jar_file=$last
+if [[ ${jar_file##*.} != "jar" ]]; then
+	jar_file=${jar_file}.jar
+fi
+
+# write options file
+
+jar_fstem=${jar_file%.*}
+jar_opts_file=$JAR_PATH/${jar_fstem}.opts
+echo $opts | tr ' ' '\n' > $jar_opts_file
+
