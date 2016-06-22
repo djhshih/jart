@@ -26,12 +26,21 @@ fi
 jar_fstem=${jar_file%%.*}
 jar_script=./$jar_fstem
 
+if (( $# >= 2)); then
+	java=$1; shift
+else
+	java="java"
+fi
+
+# decompose java into full path
+java=$(readlink -f $(which $java))
+
 if [[ ! -f $jar_script ]]; then
 
 # print command 
 cat > $jar_script <<EOF
 #!/bin/bash
-java -jar $JAR_PATH/$jar_file "\$@"
+$java -jar $JAR_PATH/$jar_file "\$@"
 EOF
 
 chmod +x $jar_script
