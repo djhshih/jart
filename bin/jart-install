@@ -16,7 +16,9 @@ jar_file=$1; shift
 jar_base=${jar_file##*/}
 target_file=$JAR_PATH/${jar_base}
 
-cp $jar_file $target_file
+if [[ ! $jar_file -ef $target_file ]]; then
+	cp $jar_file $target_file
+fi
 
 # Create symbolic links if jar file contains versioning
 if echo $jar_base | grep -q -E '[-_][0-9]+(\.[0-9]+)+\.jar'; then
