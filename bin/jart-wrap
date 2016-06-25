@@ -8,7 +8,7 @@ set -o nounset
 JAR_PATH=${JAR_PATH:-$HOME/java}
 
 if (( $# < 1 )); then
-	echo "usage: ${0##*/} <jar_file> ..."
+	echo "usage: ${0##*/} <jar_file> [java]"
 	echo
 	echo "Available jar files to wrap: "
 	echo
@@ -26,7 +26,7 @@ fi
 jar_fstem=${jar_file%%.*}
 jar_script=./$jar_fstem
 
-if (( $# >= 2)); then
+if (( $# > 0)); then
 	java=$1; shift
 else
 	java="java"
